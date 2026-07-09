@@ -1,0 +1,65 @@
+/* ===== Large Screen Overrides ===== */
+
+/* Navigation: spread links wider */
+nav ul {
+  gap: 3rem;
+}
+
+nav a {
+  font-size: 1.1rem;
+  padding: 0.75rem 0;
+}
+
+/* Main content: wider spacing */
+main {
+  max-width: 1200px;
+  padding: 3rem;
+}
+
+main h1 {
+  font-size: 2.5rem;
+}
+
+main h2 {
+  font-size: 1.5rem;
+}
+
+main p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+}
+
+/* Lists: side-by-side */
+main ul {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+main ul li {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Logo larger */
+.main-logo {
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+/* Footer more padding */
+footer {
+  padding: 2rem;
+  font-size: 1rem;
+}
+
+/* Event Blocks: more spacious grid */
+.event-blocks {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+}
+
+.event-card {
+  padding: 2rem;
+  font-size: 1.1rem;
+}
