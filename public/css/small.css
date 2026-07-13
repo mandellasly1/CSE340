@@ -89,3 +89,12 @@ footer {
   margin: 0.5rem 0;
   padding: 1rem;
 }
+
+
+.projects-container {
+  grid-template-columns: repeat(1, 1fr); /* stack vertically */
+}
+
+.project-box {
+  margin-bottom: 15px;
+}

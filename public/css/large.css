@@ -63,3 +63,7 @@ footer {
   padding: 2rem;
   font-size: 1.1rem;
 }
+
+.projects-container {
+  grid-template-columns: repeat(5, 1fr); /* 5 per row */
+}
