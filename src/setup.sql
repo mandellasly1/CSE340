@@ -70,3 +70,44 @@ VALUES
 (3, 'Clothing Collection', 'Gathering clothes for families in need.', 'Community Center', '2026-09-02');
 
 
+
+-- Categories table
+
+CREATE TABLE categories (
+  category_id SERIAL PRIMARY KEY,
+  category_name VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT
+);
+
+
+
+-- Join table between service_projects and categories
+
+CREATE TABLE project_categories (
+  project_id INT NOT NULL,
+  category_id INT NOT NULL,
+  PRIMARY KEY (project_id, category_id),
+  FOREIGN KEY (project_id) REFERENCES service_projects(project_id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
+);
+
+
+-- Insert sample categories with descriptions
+
+INSERT INTO categories (category_name, description) VALUES
+('Environmental', 'Projects focused on sustainability and conservation.'),
+('Educational', 'Initiatives to support learning and growth.'),
+('Community Service', 'Helping neighborhoods thrive through volunteer work.'),
+('Health & Wellness', 'Promoting healthy lifestyles and medical support');
+
+-- Associate service projects with categories
+-- Adjust project_id values to match your actual service_projects table
+
+INSERT INTO project_categories (project_id, category_id) VALUES
+(1, 1), -- Project 1 → Environmental
+(2, 2), -- Project 2 → Educational
+(3, 3), -- Project 3 → Community Service
+(4, 4); -- Project 4 → Health & Wellness
+
+
+

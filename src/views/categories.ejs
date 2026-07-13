@@ -1,22 +1,14 @@
 <%- include('partials/header') %>
 
-<main >
+<main>
   <h1><%= title %></h1>
-  <div class="event-card">
-    <h3>Environmental</h3>
-    <p>Projects focused on sustainability and conservation.</p>
-  </div>
-  <div class="event-card">
-    <h3>Educational</h3>
-    <p>Initiatives to support learning and growth.</p>
-  </div>
-  <div class="event-card">
-    <h3>Community Service</h3>
-    <p>Helping neighborhoods thrive through volunteer work.</p>
-  </div>
-  <div class="event-card">
-    <h3>Health & Wellness</h3>
-    <p>Promoting healthy lifestyles and medical support.</p>
+  <div class="categories-list">
+    <% categories.forEach(category => { %>
+      <div class="event-card">
+        <h3><%= category.category_name %></h3>
+        <p><%= category.description %></p>
+      </div>
+    <% }); %>
   </div>
 </main>
 

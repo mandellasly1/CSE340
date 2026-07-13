@@ -4,6 +4,7 @@ import path from 'path';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
 import { getAllProjects } from "./src/models/projects.js";
+import { getAllCategories } from './src/models/categories.js';
 
 
 
@@ -36,11 +37,16 @@ app.set('views', path.join(__dirname, 'src/views'));
 /**
  * Routes
  */
+
+// home route
+
 app.get('/', async (req, res) => {
     const title = 'Home';
     res.render('home', { title });
 });
 
+
+// Organizations route
 
 app.get('/organizations', async (req, res) => {
     const organizations = await getAllOrganizations();
@@ -50,6 +56,8 @@ app.get('/organizations', async (req, res) => {
 });
 
 
+// Projects route
+
 app.get('/projects', async (req, res) => {
     const projects = await getAllProjects();
     const title = 'Service Projects';
@@ -58,11 +66,13 @@ app.get('/projects', async (req, res) => {
 });
 
 
-
+// Categories route
 
 app.get('/categories', async (req, res) => {
-  const title = 'Service Project Categories';
-  res.render('categories', { title });
+    const categories = await getAllCategories();
+    const title = 'Service Project Categories';
+
+    res.render('categories', { title, categories });
 });
 
 
