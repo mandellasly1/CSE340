@@ -1,0 +1,248 @@
+/*
+
+// Generic middleware - logs all requests
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next(); // Continue to next middleware
+});
+
+// Route handler - ends the request-response cycle
+app.get('/home', (req, res) => {
+    res.send('Welcome home!');
+});
+
+// Error handler - processes errors
+app.use((err, req, res, next) => {
+    console.error(err.message);
+    res.status(500).send('Something went wrong!');
+});
+
+
+
+// Middleware that conditionally continues or stops
+app.use((req, res, next) => {
+    if (!req.headers['authorization']) {
+        // Create error and skip to error handler
+        const err = new Error('Authorization header required');
+        err.status = 401;
+        return next(err);
+    }
+    
+    // All good, continue to next middleware
+    next();
+});
+
+// This only runs if authorization header exists
+app.use((req, res, next) => {
+    console.log('User is authenticated');
+    next();
+});
+
+// Error handler catches authentication failures
+app.use((err, req, res, next) => {
+    res.status(err.status || 500).send(err.message);
+});
+
+
+
+
+// Middleware that conditionally continues or stops
+app.use((req, res, next) => {
+    if (!req.headers['authorization']) {
+        // Create error and skip to error handler
+        const err = new Error('Authorization header required');
+        err.status = 401;
+        return next(err);
+    }
+    
+    // All good, continue to next middleware
+    next();
+});
+
+// This only runs if authorization header exists
+app.use((req, res, next) => {
+    console.log('User is authenticated');
+    next();
+});
+
+// Error handler catches authentication failures
+app.use((err, req, res, next) => {
+    res.status(err.status || 500).send(err.message);
+});
+
+
+
+// Middleware to determine user role
+app.use((req, res, next) => {
+    // Set user role based on query parameter or default to guest
+    res.locals.userRole = req.query.role || 'guest';
+    res.locals.timestamp = new Date().toISOString();
+    next();
+});
+
+// Middleware that uses the role data
+app.use((req, res, next) => {
+    console.log(`User role: ${res.locals.userRole}`);
+    next();
+});
+
+// Route handler that uses the data
+app.get('/dashboard', (req, res) => {
+    res.send(`
+        <h1>Dashboard</h1>
+        <p>Role: ${res.locals.userRole}</p>
+        <p>Time: ${res.locals.timestamp}</p>
+    `);
+});
+
+
+
+// Global request logging
+app.use((req, res, next) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] ${req.method} ${req.url}`);
+    next();
+});
+
+// Global security headers
+app.use((req, res, next) => {
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    next();
+});
+
+// Global user context setup
+app.use((req, res, next) => {
+    // Set default user context
+    res.locals.isLoggedIn = false;
+    res.locals.userName = 'Guest';
+    // In a real app, you'd check authentication here
+    next();
+});
+
+// All routes defined after this point will have these middleware applied
+app.get('/', (req, res) => {
+    res.send(`Hello, ${res.locals.userName}!`);
+});
+
+
+// Define reusable middleware functions
+const logAccess = (req, res, next) => {
+    console.log(`Access attempt to ${req.url}`);
+    next();
+};
+
+const requireAdmin = (req, res, next) => {
+    // In a real app, you'd check actual authentication
+    if (req.headers.role !== 'admin') {
+        return res.status(403).send('Admin access required');
+    }
+    next();
+};
+
+const requireAuth = (req, res, next) => {
+    if (!req.headers.authorization) {
+        return res.status(401).send('Authentication required');
+    }
+    next();
+};
+
+// Public route - no middleware needed
+app.get('/', (req, res) => {
+    res.send('Welcome to our site!');
+});
+
+// Protected route - requires authentication
+app.get('/profile', requireAuth, (req, res) => {
+    res.send('Your profile information');
+});
+
+// Admin route - requires both logging and admin check
+app.get('/admin', logAccess, requireAdmin, (req, res) => {
+    res.send('Admin dashboard');
+});
+
+// Multiple middleware functions in sequence
+app.get('/secure-admin', logAccess, requireAuth, requireAdmin, (req, res) => {
+    res.send('Super secure admin area');
+});
+
+
+
+
+// Global error handler - note the four parameters
+app.use((err, req, res, next) => {
+    // Log error details for developers
+    console.error('Error occurred:', err.message);
+    console.error('Stack trace:', err.stack);
+    
+    // Determine response based on error type
+    const status = err.status || 500;
+    const message = status === 404 
+        ? 'The page you requested could not be found.' 
+        : 'An unexpected error occurred. Please try again later.';
+    
+    // Send appropriate response to user
+    res.status(status).send(message);
+});
+
+
+
+// Route that triggers an error
+app.get('/example-error', (req, res, next) => {
+    // Simulate a problem - perhaps database connection failed
+    const err = new Error('Database connection failed');
+    err.status = 500;
+    
+    // Forward error to global error handler
+    next(err);
+});
+
+// This middleware won't run if the error above occurs
+app.use((req, res, next) => {
+    console.log('This will be skipped when errors occur');
+    next();
+});
+
+// Global error handler catches the error
+app.use((err, req, res, next) => {
+    res.status(err.status || 500).send(err.message);
+});
+
+
+
+
+// All your normal, real routes go here such as
+app.get('/', (req, res) => {
+    res.send('Home page');
+});
+
+app.get('/about', (req, res) => {
+    res.send('About page');
+});
+
+// Catch-all middleware for unmatched routes
+app.use((req, res, next) => {
+    const err = new Error('Page Not Found');
+    err.status = 404;
+    next(err); // Forward to global error handler
+});
+
+// Global error handler processes both 404s and 500s
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    
+    const status = err.status || 500;
+    const message = status === 404
+        ? 'The page you requested does not exist.'
+        : 'An unexpected server error occurred.';
+    
+    res.status(status).send(message);
+});
+
+
+
+
+
+
+*/
