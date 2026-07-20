@@ -39,7 +39,6 @@ const getProjectsByOrganizationId = async (organizationId) => {
 
 
 
-
 // getUpcomingProjects(number_of_projects)
 
 const getUpcomingProjects = async (number_of_projects) => {
