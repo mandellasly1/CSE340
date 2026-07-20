@@ -135,7 +135,7 @@ footer {
 .event-card:nth-child(1),
 .event-card:nth-child(5),
 .event-card:nth-child(9) {
-  background: #004080; /* deep blue */
+  background: #283f58; /* deep blue */
   color: #ffffff;
 }
 
