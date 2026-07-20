@@ -39,6 +39,7 @@ const getProjectsByOrganizationId = async (organizationId) => {
 
 
 
+
 // getUpcomingProjects(number_of_projects)
 
 const getUpcomingProjects = async (number_of_projects) => {
@@ -64,6 +65,7 @@ const getUpcomingProjects = async (number_of_projects) => {
 };
 
 
+
 // getProjectDetails(id)
 
 const getProjectDetails = async (id) => {
@@ -85,6 +87,7 @@ const getProjectDetails = async (id) => {
 
   return result.rows.length > 0 ? result.rows[0] : null;
 };
+
 
 
 
