@@ -15,8 +15,8 @@
           <a href="/project/<%= project.project_id %>"><%= project.title %></a>
         </h3>
 
-        <!-- Date (use project.date instead of project.project_date if that’s your column name) -->
-        <p>Date: <%= new Date(project.date).toDateString() %></p>
+        <!-- Date (use project.project_date instead of project.project.date if that’s your column name) -->
+        <p>Date: <%= project.project_date ? new Date(project.project_date).toDateString() : 'No date available' %></p>
 
         <!-- Organization name now links to organization details -->
         <p>

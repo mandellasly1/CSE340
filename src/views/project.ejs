@@ -5,7 +5,7 @@
   <div class="project-details">
     <h2><%= project.title %></h2>
     <p><strong>Description:</strong> <%= project.description %></p>
-    <p><strong>Date:</strong> <%= new Date(project.date).toDateString() %></p>
+    <p><strong>Date:</strong> <%= project.project_date ? new Date(project.project_date).toDateString() : 'No date available' %></p>
     <p><strong>Location:</strong> <%= project.location %></p>
 
     <p>
@@ -24,7 +24,7 @@
         </li>
       <% }) %>
     </ul>
-    
+
   </div>
 </main>
 <%- include('partials/footer') %>
