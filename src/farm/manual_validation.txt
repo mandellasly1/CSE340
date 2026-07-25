@@ -1,0 +1,375 @@
+// Manual Validation Approach
+
+/*
+
+app.post('/register', (req, res) => {
+    const { email, password, age } = req.body;
+    const errors = [];
+    
+    // Validate email
+    if (!email) {
+        errors.push('Email is required');
+    } else if (!email.includes('@') || !email.includes('.')) {
+        errors.push('Please provide a valid email address');
+    }
+    
+    // Validate password
+    if (!password) {
+        errors.push('Password is required');
+    } else if (password.length < 8) {
+        errors.push('Password must be at least 8 characters long');
+    }
+    
+    // Validate age
+    const ageNumber = parseInt(age);
+    if (!age) {
+        errors.push('Age is required');
+    } else if (isNaN(ageNumber) || ageNumber < 13 || ageNumber > 120) {
+        errors.push('Age must be between 13 and 120');
+    }
+    
+    // Handle validation results
+    if (errors.length > 0) {
+        return res.status(400).json({
+            success: false,
+            errors: errors
+        });
+    }
+    
+    // If validation passes, process the registration
+    console.log('Valid registration data:', { email, age: ageNumber });
+    res.json({
+        success: true,
+        message: 'Registration successful'
+    });
+});
+
+*/
+
+
+
+// Express-validator: Common validation methods 
+
+
+/*
+
+// Define validation rules for registration
+const registrationValidation = [
+    body('email')
+        .isEmail()
+        .withMessage('Please provide a valid email address')
+        .normalizeEmail(),
+    
+    body('password')
+        .isLength({ min: 8 })
+        .withMessage('Password must be at least 8 characters long'),
+    
+    body('age')
+        .isInt({ min: 13, max: 120 })
+        .withMessage('Age must be between 13 and 120')
+];
+
+// Apply validation to the route
+app.post('/register', registrationValidation, (req, res) => {
+    // Check for validation errors
+    const results = validationResult(req);
+    
+    if (!results.isEmpty()) {
+        return res.status(400).json({
+            success: false,
+            errors: results.array()
+        });
+    }
+    
+    // If validation passes, process the data
+    const { email, password, age } = req.body;
+    console.log('Valid registration:', { email, age });
+    
+    res.json({
+        success: true,
+        message: 'Registration successful'
+    });
+});// Define validation rules for registration
+const registrationValidation = [
+    body('email')
+        .isEmail()
+        .withMessage('Please provide a valid email address')
+        .normalizeEmail(),
+    
+    body('password')
+        .isLength({ min: 8 })
+        .withMessage('Password must be at least 8 characters long'),
+    
+    body('age')
+        .isInt({ min: 13, max: 120 })
+        .withMessage('Age must be between 13 and 120')
+];
+
+// Apply validation to the route
+app.post('/register', registrationValidation, (req, res) => {
+    // Check for validation errors
+    const results = validationResult(req);
+    
+    if (!results.isEmpty()) {
+        return res.status(400).json({
+            success: false,
+            errors: results.array()
+        });
+    }
+    
+    // If validation passes, process the data
+    const { email, password, age } = req.body;
+    console.log('Valid registration:', { email, age });
+    
+    res.json({
+        success: true,
+        message: 'Registration successful'
+    });
+});
+
+*/
+
+
+// Advanced Validation Examples
+
+/*
+
+const advancedValidation = [
+    // Email validation with custom domain restrictions
+    body('email')
+        .isEmail()
+        .withMessage('Invalid email format')
+        .custom((value) => {
+            if (value.endsWith('@tempmail.com')) {
+                throw new Error('Temporary email addresses are not allowed');
+            }
+            return true;
+        })
+        .normalizeEmail(),
+    
+    // URL validation
+    body('website')
+        .optional()
+        .isURL()
+        .withMessage('Please provide a valid website URL'),
+    
+    // Phone number validation
+    body('phone')
+        .isMobilePhone()
+        .withMessage('Please provide a valid phone number'),
+    
+    // Date validation
+    body('birthdate')
+        .isISO8601()
+        .withMessage('Please provide a valid date')
+        .custom((value) => {
+            const date = new Date(value);
+            const eighteenYearsAgo = new Date();
+            eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+            
+            if (date > eighteenYearsAgo) {
+                throw new Error('You must be at least 18 years old');
+            }
+            return true;
+        })
+];
+
+*/
+
+
+// Password Complexity Validation
+
+
+/*
+
+// Custom password validator
+const passwordValidation = body('password')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long')
+    .custom((value) => {
+        // Check for at least one number
+        if (!/\d/.test(value)) {
+            throw new Error('Password must contain at least one number');
+        }
+        
+        // Check for at least one special character
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+            throw new Error('Password must contain at least one special character');
+        }
+        
+        // Check for at least one uppercase letter
+        if (!/[A-Z]/.test(value)) {
+            throw new Error('Password must contain at least one uppercase letter');
+        }
+        
+        // Check for at least one lowercase letter
+        if (!/[a-z]/.test(value)) {
+            throw new Error('Password must contain at least one lowercase letter');
+        }
+        
+        return true;
+    });
+
+
+    */
+
+
+
+
+// Username Uniqueness Validation
+
+
+/*
+// Simulate a database check (you would use your actual database here)
+const existingUsernames = ['admin', 'user', 'test', 'demo'];
+
+const usernameValidation = body('username')
+    .isLength({ min: 3, max: 20 })
+    .withMessage('Username must be between 3 and 20 characters')
+    .matches(/^[a-zA-Z0-9_]+$/)
+    .withMessage('Username can only contain letters, numbers, and underscores')
+    .custom(async (value) => {
+        // Simulate database lookup
+        if (existingUsernames.includes(value.toLowerCase())) {
+            throw new Error('Username is already taken');
+        }
+        return true;
+    });
+
+
+ */   
+
+
+
+ // Combining Multiple Custom Validators
+
+
+ /*
+
+
+ const completeRegistrationValidation = [
+    // Email validation
+    body('email')
+        .isEmail()
+        .withMessage('Invalid email format')
+        .normalizeEmail(),
+    
+    // Username validation
+    usernameValidation,
+    
+    // Password validation
+    passwordValidation,
+    
+    // Password confirmation
+    body('confirmPassword')
+        .custom((value, { req }) => {
+            if (value !== req.body.password) {
+                throw new Error('Passwords do not match');
+            }
+            return true;
+        }),
+    
+    // Terms acceptance
+    body('acceptTerms')
+        .equals('true')
+        .withMessage('You must accept the terms and conditions')
+];
+
+// Use in route
+app.post('/register', completeRegistrationValidation, (req, res) => {
+    const results = validationResult(req);
+    
+    if (!results.isEmpty()) {
+        return res.status(400).json({
+            success: false,
+            errors: results.array()
+        });
+    }
+    
+    // Process successful registration
+    const { email, username, password } = req.body;
+    console.log('New user registered:', { email, username });
+    
+    res.json({
+        success: true,
+        message: 'Registration completed successfully'
+    });
+});
+
+
+
+*/
+
+
+
+// Input Sanitization
+
+
+/*
+
+const sanitizedValidation = [
+body('name')
+    .trim() // Remove leading/trailing whitespace
+    .escape() // Escape HTML characters
+    .isLength({ min: 2, max: 50 })
+    .withMessage('Name must be between 2 and 50 characters'),
+
+body('email')
+    .normalizeEmail() // Standardize email format
+    .isEmail()
+    .withMessage('Invalid email address'),
+
+body('bio')
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Bio cannot exceed 500 characters')
+    .customSanitizer((value) => {
+        // Remove potentially dangerous HTML tags
+        return value.replace(/<script>.*<\/script>/gi, '');
+    })
+];
+
+
+*/
+
+
+
+// Processing Validation Errors
+
+
+app.post('/register', registrationValidation, (req, res) => {
+    const results = validationResult(req);
+    
+    if (!results.isEmpty()) {
+        // Get all errors as an array
+        const errorArray = results.array();
+        
+        // Group errors by field
+        const errorsByField = results.mapped();
+        
+        // Format for different response types
+        if (req.headers.accept === 'application/json') {
+            // API response format
+            return res.status(400).json({
+                success: false,
+                errors: errorArray,
+                fields: errorsByField
+            });
+        } else {
+            // Web form response - render page with errors
+            return res.render('register', {
+                title: 'Register',
+                errors: errorArray,
+                formData: req.body // Preserve user input
+            });
+        }
+    }
+    
+    // Success handling
+    res.redirect('/dashboard');
+});
+
+
+*/
+
+
