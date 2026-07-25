@@ -1,5 +1,5 @@
 // Import any needed model functions
-import { getAllOrganizations, getOrganizationDetails } from '../models/organizations.js';
+import { getAllOrganizations, getOrganizationDetails, createOrganization } from '../models/organizations.js';
 import { getProjectsByOrganizationId } from '../models/projects.js';
 
 
@@ -22,5 +22,30 @@ const showOrganizationDetailsPage = async (req, res) => {
 };
 
 
+
+// Controller to show the new organization form
+const showNewOrganizationForm = async (req, res) => {
+  const title = 'Add New Organization';
+  res.render('new-organization', { title });
+};
+
+
+
+// Controller to process the new organization form
+const processNewOrganizationForm = async (req, res) => {
+  const { name, description, contactEmail } = req.body;
+  const logoFilename = 'placeholder-logo.png'; // always use placeholder logo
+
+  const organizationId = await createOrganization(name, description, contactEmail, logoFilename);
+
+
+  // Set a success flash message
+    req.flash('success', 'Organization added successfully!');
+
+  // Redirect to the new organization’s details page
+  res.redirect(`/organization/${organizationId}`);
+};
+
+
 // Export any controller functions
-export { showOrganizationsPage, showOrganizationDetailsPage };
+export { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm  };
