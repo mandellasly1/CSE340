@@ -165,6 +165,8 @@ footer {
 
 
 
+
+
 /* Hover effect with tint + scale */
 
 .event-card:nth-child(odd):hover {
@@ -212,6 +214,11 @@ footer {
 
 .project-box.unityserve {
   background-color: #2196F3; /* UnityServe Volunteers */
+  color: #fff;
+}
+
+.project-box.Hospital {
+  background-color: hwb(177 3% 32%); /* Hospital management Reform */
   color: #fff;
 }
 
