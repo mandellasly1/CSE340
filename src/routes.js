@@ -3,7 +3,7 @@ import express from 'express';
 import { showHomePage } from './controllers/index.js';
 import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm } from './controllers/organizations.js';
 import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
-import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm } from './controllers/categories.js';
+import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
 
 
@@ -45,6 +45,13 @@ router.get('/project/:projectId/assign-categories', showAssignCategoriesForm);
 // Routes for editing a project
 router.get('/edit-project/:id', showEditProjectForm);
 
+// Routes for new categories
+router.get('/new-category', showNewCategoryForm);
+
+
+// Routes for editing a category
+router.get('/edit-category/:id', showEditCategoryForm);
+
 
 // error-handling routes
 router.get('/test-error', testErrorPage);
@@ -70,7 +77,11 @@ router.post('/project/:projectId/assign-categories', processAssignCategoriesForm
 // Routes for editing a project
 router.post('/edit-project/:id', processEditProjectForm);
 
+// Route to handle new category form submission
+router.post('/new-category', processNewCategoryForm);
 
+// Routes for editing a category
+router.post('/edit-category/:id', processEditCategoryForm);
 
 
 export default router;

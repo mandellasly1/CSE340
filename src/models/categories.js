@@ -80,9 +80,43 @@ const getProjectsByCategoryId = async (categoryId) => {
 };
 
 
+const insertCategory = async (name) => {
+  if (!name || name.length > 100) {
+    throw new Error('Category name must be present and less than 100 characters.');
+  }
+
+  const query = `
+    INSERT INTO categories (category_name)
+    VALUES ($1)
+    RETURNING category_id;
+  `;
+  const result = await db.query(query, [name]);
+
+  return result.rows[0].category_id;
+};
+
+const updateCategory = async (id, name) => {
+  if (!name || name.length < 3 || name.length > 100) {
+    throw new Error('Category name must be between 3 and 100 characters.');
+  }
+
+  const query = `
+    UPDATE categories
+    SET category_name = $1
+    WHERE category_id = $2
+    RETURNING category_id;
+  `;
+  const result = await db.query(query, [name, id]);
+
+  if (result.rows.length === 0) {
+    throw new Error('Failed to update category.');
+  }
+
+  return result.rows[0].category_id;
+};
 
 
 
 
-export { getAllCategories, getCategoryById, getCategoriesByProjectId, getProjectsByCategoryId, updateCategoryAssignments };
+export { getAllCategories, getCategoryById, getCategoriesByProjectId, getProjectsByCategoryId, updateCategoryAssignments, insertCategory, updateCategory };
 
