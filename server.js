@@ -5,6 +5,12 @@ import { testConnection } from './src/models/db.js';
 import router from './src/routes.js';
 import session from 'express-session';
 import flash from './src/middleware/flash.js';
+/*
+import flash from 'connect-flash';
+*/
+
+
+
 
 
 // Define the application environment
@@ -37,18 +43,27 @@ app.use(session({
 // Use flash message middleware
 app.use(flash);
 
+/*
+app.use((req, res, next) => {
+    res.locals.flash = req.flash;
+    res.locals.isLoggedIn = !!(req.session && req.session.user);
+    res.locals.NODE_ENV = NODE_ENV;
+    next();
+});
+*/
 
 // Allow Express to receive and process common POST data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 /**
   * Configure Express middleware
   */
 
-// Serve static files from the public directory
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 // Set EJS as the templating engine
@@ -70,6 +85,11 @@ app.use((req, res, next) => {
 
 // Middleware to make NODE_ENV available to all templates
 app.use((req, res, next) => {
+     res.locals.isLoggedIn = false;
+    if (req.session && req.session.user) {
+        res.locals.isLoggedIn = true;
+    }
+    
     res.locals.NODE_ENV = NODE_ENV;
     next();
 });

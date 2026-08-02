@@ -5,6 +5,7 @@ import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganization
 import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
 import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
+import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard } from './controllers/users.js';
 
 
 
@@ -53,6 +54,22 @@ router.get('/new-category', showNewCategoryForm);
 router.get('/edit-category/:id', showEditCategoryForm);
 
 
+// User registration routes
+router.get('/register', showUserRegistrationForm);
+
+
+// User login routes
+router.get('/login', showLoginForm);
+
+
+// User login routes
+router.get('/logout', processLogout);
+
+
+// Protected dashboard route
+router.get('/dashboard', requireLogin, showDashboard);
+
+
 // error-handling routes
 router.get('/test-error', testErrorPage);
 
@@ -82,6 +99,15 @@ router.post('/new-category', processNewCategoryForm);
 
 // Routes for editing a category
 router.post('/edit-category/:id', processEditCategoryForm);
+
+
+// User registration routes
+router.post('/register', processUserRegistrationForm);
+
+
+
+// User login routes
+router.post('/login', processLoginForm);
 
 
 export default router;
