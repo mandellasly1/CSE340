@@ -2,6 +2,32 @@
     <main>
         <h1><%= title %></h1>
         
+
+
+
+        <% if (user && user.role_name === 'admin') { %>
+        <!-- Admin-only action: Add new organization -->
+        <a href="/new-organization">Add New Organization</a>
+        <% } %>
+
+    <p>Here are a few of our partner organizations:</p>
+    <ul>
+        <% organizations.forEach(organization => { %>
+            <li>
+                <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
+                <a href="/organization/<%= organization.organization_id %>"><%= organization.name %></a>: 
+                <%= organization.contact_email %>
+
+                <% if (user && user.role_name === 'admin') { %>
+                    <!-- Admin-only action: Edit organization -->
+                    <a href="/organization/<%= organization.organization_id %>/edit">Edit Organization</a>
+                <% } %>
+            </li>
+        <% }); %>
+    </ul>
+
+
+
         <p>Here are a few of our partner organizations:</p>
         <ul>
 

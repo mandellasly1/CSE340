@@ -32,6 +32,15 @@
               <li><a href="/login">Login</a></li>
              <% } %>
 
+
+
+             <% if (user && user.role_name === 'admin') { %>
+                <!-- Admin-only global links -->
+                <li><a href="/new-organization">Add New Organization</a></li>
+                <li><a href="/projects/new">Add New Project</a></li>
+                <li><a href="/categories/new">Add New Category</a></li>
+            <% } %>
+
         </ul>
 
     </nav>
@@ -50,4 +59,7 @@
         <% } %>
     <% }); %>
     </div>
+
+
+    
     

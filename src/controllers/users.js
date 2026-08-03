@@ -1,24 +1,24 @@
 import bcrypt from 'bcrypt';
-import { createUser, authenticateUser } from '../models/users.js';
+import { createUser, findUserByEmail, authenticateUser } from '../models/users.js'; // adjust your models
 
+// Show registration form
 const showUserRegistrationForm = (req, res) => {
     res.render('register', { title: 'Register' });
 };
 
+// Process registration
 const processUserRegistrationForm = async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
         // Hash the password before storing it
-        const salt = await bcrypt.genSalt(10);
-        const passwordHash = await bcrypt.hash(password, salt);
+        const passwordHash = await bcrypt.hash(password, 10);
 
-        // Create the user in the database
-        const userId = await createUser(name, email, passwordHash);
+        // Create the user in the database (default role_id = 1 for normal user)
+        await createUser(name, email, passwordHash, 1);
 
-        // Redirect to the home page after successful registration
         req.flash('success', 'Registration successful! Please log in.');
-        res.redirect('/');
+        res.redirect('/login');
     } catch (error) {
         console.error('Error registering user:', error);
         req.flash('error', 'An error occurred during registration. Please try again.');
@@ -26,35 +26,29 @@ const processUserRegistrationForm = async (req, res) => {
     }
 };
 
-
+// Show login form
 const showLoginForm = (req, res) => {
     res.render('login', { title: 'Login' });
 };
 
-
-
-
+// Process login
 const processLoginForm = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await authenticateUser(email, password);
-        if (user) {
+        // Find user by email (join with roles to get role_name)
+        const user = await findUserByEmail(email);
+
+        if (user && await bcrypt.compare(password, user.password_hash)) {
             // Store user info in session
             req.session.user = {
                 user_id: user.user_id,
                 name: user.name,
                 email: user.email,
-                role_id: user.role_id
+                role_name: user.role_name // comes from roles table
             };
 
             req.flash('success', 'Login successful!');
-
-            if (res.locals.NODE_ENV === 'development') {
-                console.log('User logged in:', user);
-            }
-
-             // ✅ Redirect to dashboard instead of home
             res.redirect('/dashboard');
         } else {
             req.flash('error', 'Invalid email or password.');
@@ -67,27 +61,16 @@ const processLoginForm = async (req, res) => {
     }
 };
 
-
-
-
-    // A correct function for flash login
+// Logout
 const processLogout = (req, res) => {
-    // Add flash message first
     req.flash('success', 'Logout successful!');
-   
-    // Then destroy session
     req.session.destroy(err => {
-       if (err) {
-            console.error('Error destroying session:', err);
-        }
+        if (err) console.error('Error destroying session:', err);
         res.redirect('/login');
     });
 };
 
-
-
-
-
+// Require login middleware
 const requireLogin = (req, res, next) => {
     if (!req.session || !req.session.user) {
         req.flash('error', 'You must be logged in to access that page.');
@@ -96,9 +79,7 @@ const requireLogin = (req, res, next) => {
     next();
 };
 
-
-
-
+// Dashboard
 const showDashboard = (req, res) => {
     const user = req.session.user;
     res.render('dashboard', { 
@@ -108,8 +89,30 @@ const showDashboard = (req, res) => {
     });
 };
 
+// Require specific role middleware
+const requireRole = (role) => {
+    return (req, res, next) => {
+        if (!req.session || !req.session.user) {
+            req.flash('error', 'You must be logged in to access this page.');
+            return res.redirect('/login');
+        }
 
+        if (req.session.user.role_name !== role) {
+            req.flash('error', 'You do not have permission to access this page.');
+            return res.redirect('/');
+        }
 
+        next();
+    };
+};
 
-export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, requireLogin, processLogout, showDashboard };
-
+export { 
+    showUserRegistrationForm, 
+    processUserRegistrationForm, 
+    showLoginForm, 
+    processLoginForm, 
+    requireLogin, 
+    processLogout, 
+    showDashboard, 
+    requireRole 
+};

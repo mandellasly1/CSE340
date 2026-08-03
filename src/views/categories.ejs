@@ -2,6 +2,28 @@
 
 <main>
   <h1><%= title %></h1>
+
+
+  <% if (user && user.role_name === 'admin') { %>
+        <!-- Admin-only action: Add new category -->
+        <a href="/categories/new">Add New Category</a>
+    <% } %>
+
+    <ul>
+        <% categories.forEach(category => { %>
+            <li>
+                <a href="/category/<%= category.category_id %>"><%= category.name %></a>
+
+                <% if (user && user.role_name === 'admin') { %>
+                    <!-- Admin-only action: Edit category -->
+                    <a href="/category/<%= category.category_id %>/edit">Edit Category</a>
+                <% } %>
+            </li>
+        <% }); %>
+    </ul>
+  
+
+
   <div class="categories-list">
     <% categories.forEach(category => { %>
       <div class="event-card">
@@ -10,6 +32,16 @@
             <%= category.category_name %>
           </a>
         </h3>
+
+
+        <a href="/category/<%= category.category_id %>"><%= category.name %></a>
+
+                <% if (user && user.role_name === 'admin') { %>
+                    <!-- Admin-only action: Edit category -->
+                    <a href="/category/<%= category.category_id %>/edit">Edit Category</a>
+                <% } %>
+
+
         <p><%= category.description %></p>
       </div>
     <% }); %>

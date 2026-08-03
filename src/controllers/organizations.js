@@ -121,6 +121,11 @@ if (!results.isEmpty()) {
 };
 
 
+const newOrganizationPage = (req, res) => {
+    res.render('new-organization', { title: 'Add New Organization' });
+};
+
+
   
 
 
@@ -128,6 +133,6 @@ if (!results.isEmpty()) {
 
 
 // Export any controller functions
-export { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm };
+export { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm, newOrganizationPage };
 
 

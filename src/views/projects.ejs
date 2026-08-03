@@ -1,6 +1,28 @@
 <%- include('partials/header') %>
 <main>
   <h1><%= title %></h1>
+
+
+<% if (user && user.role_name === 'admin') { %>
+        <!-- Admin-only action: Add new project -->
+        <a href="/projects/new">Add New Project</a>
+    <% } %>
+
+    <ul>
+        <% projects.forEach(project => { %>
+            <li>
+                <a href="/project/<%= project.project_id %>"><%= project.name %></a>
+
+                <% if (user && user.role_name === 'admin') { %>
+                    <!-- Admin-only actions: Edit project and categories -->
+                    <a href="/project/<%= project.project_id %>/edit">Edit Project</a>
+                    <a href="/project/<%= project.project_id %>/categories">Edit Project Categories</a>
+                <% } %>
+            </li>
+        <% }); %>
+    </ul>
+
+  
   <p>Here are the next upcoming service projects:</p>
 
   <div class="projects-container">
