@@ -4,12 +4,6 @@
         
 
 
-
-        <% if (user && user.role_name === 'admin') { %>
-        <!-- Admin-only action: Add new organization -->
-        <a href="/new-organization">Add New Organization</a>
-        <% } %>
-
     <p>Here are a few of our partner organizations:</p>
     <ul>
         <% organizations.forEach(organization => { %>
@@ -24,21 +18,20 @@
                 <% } %>
             </li>
         <% }); %>
+
+
+        
+
     </ul>
 
+        <% if (user && user.role_name === 'admin') { %>
+        <!-- Admin-only action: Add new organization -->
+        <a href="/new-organization">Add New Organization</a>
+        <% } %>
 
-
-        <p>Here are a few of our partner organizations:</p>
-        <ul>
-
-            <% organizations.forEach(organization => { %>
-                <li><img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo"><a href="/organization/<%= organization.organization_id %>"><%= organization.name %></a>: <%= organization.contact_email %></li>
-            <% }); %>
-        </ul>
-
-         <!-- Add the link here -->
-         <p><a href="/new-organization">Add a new organization</a></p>
-
+        
     </main>
 
 <%- include('partials/footer') %>
+
+
