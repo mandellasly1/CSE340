@@ -5,6 +5,12 @@ import { testConnection } from './src/models/db.js';
 import router from './src/routes.js';
 import session from 'express-session';
 import flash from './src/middleware/flash.js';
+import userRoutes from './users.js';
+
+
+
+
+
 /*
 import flash from 'connect-flash';
 */
@@ -42,6 +48,18 @@ app.use(session({
 
 // Use flash message middleware
 app.use(flash);
+
+
+
+// Flash middleware
+app.use((req, res, next) => {
+  res.locals.flash = {
+    success: req.flash('success'),
+    error: req.flash('error')
+  };
+  next();
+});
+
 
 /*
 app.use((req, res, next) => {
@@ -142,6 +160,11 @@ app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
     next();
 });
+
+
+app.use('/', userRoutes);
+
+
 
 
 

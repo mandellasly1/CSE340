@@ -5,8 +5,8 @@ import { showOrganizationsPage, showOrganizationDetailsPage, processNewOrganizat
 import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
 import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
-import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole } from './controllers/users.js';
-
+import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, } from './controllers/users.js';
+import { isAuthenticated, isAdmin, redirectIfLoggedIn } from '../Authentication.js';
 
 const router = express.Router();
 
@@ -32,6 +32,21 @@ router.get('/logout', processLogout);
 
 // Protected dashboard
 router.get('/dashboard', requireLogin, showDashboard);
+
+
+router.get('/login', redirectIfLoggedIn, (req, res) => {
+  res.render('login', { title: 'Login' });
+});
+
+router.get('/register', redirectIfLoggedIn, (req, res) => {
+  res.render('register', { title: 'Register' });
+});
+
+
+
+
+
+
 
 // Admin-only routes
 
@@ -60,7 +75,30 @@ router.post('/edit-category/:id', requireRole('admin'), processEditCategoryForm)
 router.get('/project/:projectId/assign-categories', requireRole('admin'), showAssignCategoriesForm);
 router.post('/project/:projectId/assign-categories', requireRole('admin'), processAssignCategoriesForm);
 
+
+
+router.get('/projects', isAuthenticated, (req, res) => {
+  res.render('projects', { title: 'Projects' });
+});
+
+router.get('/categories', isAuthenticated, (req, res) => {
+  res.render('categories', { title: 'Categories' });
+});
+
+router.get('/users', isAdmin, (req, res) => {
+  res.render('users', { title: 'Manage Users' });
+});
+
+
+
+
+
 // Error handling
 router.get('/test-error', testErrorPage);
+
+
+
+
+
 
 export default router;

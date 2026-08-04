@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { createUser, findUserByEmail, authenticateUser } from '../models/users.js'; // adjust your models
+import { createUser, findUserByEmail, authenticateUser, getAllUsers } from '../models/users.js'; // adjust your models
 
 // Show registration form
 const showUserRegistrationForm = (req, res) => {
@@ -99,12 +99,34 @@ const requireRole = (role) => {
 
         if (req.session.user.role_name !== role) {
             req.flash('error', 'You do not have permission to access this page.');
-            return res.redirect('/');
+            return res.redirect('/dashboard'); // ✅ redirect non-admins to dashboard
         }
 
         next();
     };
 };
+
+
+
+
+
+// Show all registered users (admin only)
+const showAllUsers = async (req, res) => {
+    try {
+        const users = await getAllUsers();
+        res.render('users/index', { 
+            title: 'All Registered Users',
+            users
+        });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        req.flash('error', 'Unable to load users.');
+        res.redirect('/dashboard');
+    }
+};
+
+
+
 
 export { 
     showUserRegistrationForm, 
@@ -114,5 +136,6 @@ export {
     requireLogin, 
     processLogout, 
     showDashboard, 
-    requireRole 
+    requireRole,
+    showAllUsers 
 };

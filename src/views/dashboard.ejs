@@ -1,12 +1,25 @@
 <%- include('partials/header') %>
 
 <main>
-    <h1><%= title %></h1>
+  <% if (flash && flash.success) { %>
+    <p class="flash-success"><%= flash.success %></p>
+  <% } %>
+  <% if (flash && flash.error) { %>
+    <p class="flash-error"><%= flash.error %></p>
+  <% } %>
 
-    <h2>Dashboard</h2>
-    <p>Name: <%= name %></p>
-    <p>Username: <%= email %></p>
+  <h1>Welcome, <%= name %>!</h1>
+  <p>Email: <%= email %></p>
 
+  <nav>
+    <a href="/projects">Projects</a>
+    <a href="/organizations">Organizations</a>
+    <a href="/categories">Categories</a>
+
+    <% if (user && user.role_name === 'admin') { %>
+      <a href="/users">Manage Users</a>
+    <% } %>
+  </nav>
 </main>
 
 <%- include('partials/footer') %>
