@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+
+<h2><%= project.name %></h2>
+<p><%= project.description %></p>
+
+<% if (isLoggedIn) { %>
+  <% if (isVolunteering) { %>
+    <p>You are volunteering for this project.</p>
+    <form action="/project/<%= project.project_id %>/unvolunteer" method="POST">
+      <button type="submit" class="remove">Remove Volunteer</button>
+    </form>
+  <% } else { %>
+    <form action="/project/<%= project.project_id %>/volunteer" method="POST">
+      <button type="submit">Volunteer</button>
+    </form>
+  <% } %>
+<% } else { %>
+  <p><a href="/login">Log in</a> to volunteer for this project.</p>
+<% } %>
+
+<%- include('partials/footer') %>

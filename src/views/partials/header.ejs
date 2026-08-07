@@ -12,52 +12,47 @@
   <nav>
     <!-- Hidden checkbox for toggle -->
     <input type="checkbox" id="menu-toggle">
-
-    <!-- Hamburger icon -->
     <label for="menu-toggle" class="menu-icon">☰</label>
         
     <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/organizations">Organizations</a></li>
-      <li><a href="/projects">Projects</a></li>
-      <li><a href="/categories">Categories</a></li>
+      <li><a href="/" class="<%= (title === 'Home') ? 'active' : '' %>">Home</a></li>
+      <li><a href="/organizations" class="<%= (title === 'Organizations') ? 'active' : '' %>">Organizations</a></li>
+      <li><a href="/projects" class="<%= (title === 'Upcoming Service Projects' || title === 'Service Project Details') ? 'active' : '' %>">Projects</a></li>
+      <li><a href="/categories" class="<%= (title === 'Categories') ? 'active' : '' %>">Categories</a></li>
 
       <% if (isLoggedIn) { %>
         <li><a href="/logout">Logout</a></li>
       <% } else { %>
-        <li><a href="/register">Register</a></li>
-        <li><a href="/login">Login</a></li>
+        <li><a href="/register" class="<%= (title === 'Register') ? 'active' : '' %>">Register</a></li>
+        <li><a href="/login" class="<%= (title === 'Login') ? 'active' : '' %>">Login</a></li>
       <% } %>
 
       <% if (user && user.role_name === 'admin') { %>
-        <!-- Admin-only global links -->
         <li><a href="/new-organization">Add New Organization</a></li>
-        <li><a href="/projects/new">Add New Project</a></li>
-        <li><a href="/categories/new">Add New Category</a></li>
+        <li><a href="/new-project">Add New Project</a></li>
+        <li><a href="/new-category">Add New Category</a></li>
         <li><a href="/users">Manage Users</a></li>
       <% } %>
     </ul>
   </nav>
 
+  <!-- Flash messages -->
+  <div class="flash-messages">
+    <% if (flash && flash.success && flash.success.length > 0) { %>
+      <% flash.success.forEach(msg => { %>
+        <p class="flash-success">
+          <span><%= msg %></span>
+          <span class="flash-close" onclick="this.parentElement.style.display='none'">&times;</span>
+        </p>
+      <% }) %>
+    <% } %>
 
-  
- <!-- Flash messages -->
-<div class="flash-messages">
-  <% if (flash && flash.success && flash.success.length > 0) { %>
-    <% flash.success.forEach(msg => { %>
-      <p class="flash-success">
-        <span><%= msg %></span>
-        <span class="flash-close" onclick="this.parentElement.style.display='none'">&times;</span>
-      </p>
-    <% }) %>
-  <% } %>
-
-  <% if (flash && flash.error && flash.error.length > 0) { %>
-    <% flash.error.forEach(msg => { %>
-      <p class="flash-error">
-        <span><%= msg %></span>
-        <span class="flash-close" onclick="this.parentElement.style.display='none'">&times;</span>
-      </p>
-    <% }) %>
-  <% } %>
-</div>
+    <% if (flash && flash.error && flash.error.length > 0) { %>
+      <% flash.error.forEach(msg => { %>
+        <p class="flash-error">
+          <span><%= msg %></span>
+          <span class="flash-close" onclick="this.parentElement.style.display='none'">&times;</span>
+        </p>
+      <% }) %>
+    <% } %>
+  </div>

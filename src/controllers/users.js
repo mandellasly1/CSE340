@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
 import { createUser, findUserByEmail, authenticateUser, getAllUsers } from '../models/users.js'; // adjust your models
+import { getUserVolunteers } from '../models/volunteer.js';
+
 
 // Show registration form
 const showUserRegistrationForm = (req, res) => {
@@ -79,15 +81,26 @@ const requireLogin = (req, res, next) => {
     next();
 };
 
+
 // Dashboard
-const showDashboard = (req, res) => {
+const showDashboard = async (req, res) => {
+  try {
     const user = req.session.user;
+    const projects = await getUserVolunteers(user.user_id);
+
     res.render('dashboard', { 
-        title: 'Dashboard',
-        name: user.name,
-        email: user.email
+      title: 'Dashboard',
+      name: user.name,
+      email: user.email,
+      projects
     });
+  } catch (err) {
+    console.error('Error loading dashboard:', err);
+    res.status(500).render('500', { message: 'Server error' });
+  }
 };
+
+
 
 // Require specific role middleware
 const requireRole = (role) => {
@@ -124,6 +137,8 @@ const showAllUsers = async (req, res) => {
         res.redirect('/dashboard');
     }
 };
+
+
 
 
 

@@ -157,5 +157,13 @@ JOIN roles r ON u.role_id = r.role_id;
 DELETE FROM users WHERE email = 'test@example.com';
 
 
+-- Volunteers table
+CREATE TABLE IF NOT EXISTS volunteers (
+  user_id INT NOT NULL,
+  project_id INT NOT NULL,
+  PRIMARY KEY (user_id, project_id),
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (project_id) REFERENCES service_projects(project_id) ON DELETE CASCADE
+);
 
 
