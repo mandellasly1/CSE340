@@ -1,7 +1,7 @@
 import { addVolunteer, removeVolunteer } from '../models/volunteer.js';
 
 // Volunteer for a project
-export async function volunteer(req, res) {
+const volunteer = async (req, res) => {
   try {
     await addVolunteer(req.session.user.user_id, req.params.id);
     req.flash('success', 'You are now volunteering for this project.');
@@ -11,10 +11,10 @@ export async function volunteer(req, res) {
     req.flash('error', 'There was a problem volunteering for this project.');
     res.redirect(`/project/${req.params.id}`);
   }
-}
+};
 
 // Remove volunteer from a project
-export async function unvolunteer(req, res) {
+const unvolunteer = async (req, res) => {
   try {
     await removeVolunteer(req.session.user.user_id, req.params.id);
     req.flash('success', 'You have removed yourself as a volunteer.');
@@ -24,4 +24,6 @@ export async function unvolunteer(req, res) {
     req.flash('error', 'There was a problem removing you from this project.');
     res.redirect(`/project/${req.params.id}`);
   }
-}
+};
+
+export { volunteer, unvolunteer };
