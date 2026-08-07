@@ -143,6 +143,7 @@ CREATE TABLE users (
 );
 
 
+
 -- JUST TO TEST
 -- Insert a test user
 INSERT INTO users (name, email, password_hash, role_id) 
@@ -155,6 +156,7 @@ JOIN roles r ON u.role_id = r.role_id;
 
 -- Delete the test user
 DELETE FROM users WHERE email = 'test@example.com';
+
 
 
 -- Volunteers table
