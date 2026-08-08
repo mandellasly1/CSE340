@@ -12,6 +12,8 @@ const addVolunteer = async (userId, projectId) => {
   );
 };
 
+
+
 // Remove a volunteer from a project
 const removeVolunteer = async (userId, projectId) => {
   return db.query(
