@@ -1,5 +1,6 @@
 import { addVolunteer, removeVolunteer } from '../models/volunteer.js';
 
+
 // Volunteer for a project
 const volunteer = async (req, res) => {
   try {

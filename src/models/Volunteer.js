@@ -1,5 +1,7 @@
 import db from './db.js';
 
+
+
 // Add a volunteer to a project
 const addVolunteer = async (userId, projectId) => {
   return db.query(

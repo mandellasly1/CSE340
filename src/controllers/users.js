@@ -3,6 +3,7 @@ import { createUser, findUserByEmail, authenticateUser, getAllUsers } from '../m
 import { getUserVolunteers } from '../models/volunteer.js';
 
 
+
 // Show registration form
 const showUserRegistrationForm = (req, res) => {
     res.render('register', { title: 'Register' });
